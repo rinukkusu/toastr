@@ -9,12 +9,15 @@ class Toastr {
   bool _removed = false;
 
   Toastr(ToastrType type, String title, String message,
-      {Duration duration: const Duration(seconds: 2)}) {
+      {Duration duration: const Duration(seconds: 2),
+      ToastrPosition position: ToastrPosition.TopRight}) {
     Element toastContainerElement =
         document.body.querySelector('#toast-container');
 
     if (toastContainerElement == null) {
-      toastContainerElement = new DivElement()..id = 'toast-container';
+      toastContainerElement = new DivElement()
+        ..id = 'toast-container'
+        ..className = _computePositioningClass(position);
 
       document.body.children.add(toastContainerElement);
     }
@@ -42,20 +45,40 @@ class Toastr {
     new Future.delayed(duration, remove);
   }
 
-  factory Toastr.success({String title, String message, Duration duration}) {
-    return new Toastr(ToastrType.Success, title, message, duration: duration);
+  factory Toastr.success(
+      {String title,
+      String message,
+      Duration duration: const Duration(seconds: 2),
+      ToastrPosition position: ToastrPosition.TopRight}) {
+    return new Toastr(ToastrType.Success, title, message,
+        duration: duration, position: position);
   }
 
-  factory Toastr.info({String title, String message, Duration duration}) {
-    return new Toastr(ToastrType.Info, title, message, duration: duration);
+  factory Toastr.info(
+      {String title,
+      String message,
+      Duration duration: const Duration(seconds: 2),
+      ToastrPosition position: ToastrPosition.TopRight}) {
+    return new Toastr(ToastrType.Info, title, message,
+        duration: duration, position: position);
   }
 
-  factory Toastr.warning({String title, String message, Duration duration}) {
-    return new Toastr(ToastrType.Warning, title, message, duration: duration);
+  factory Toastr.warning(
+      {String title,
+      String message,
+      Duration duration: const Duration(seconds: 2),
+      ToastrPosition position: ToastrPosition.TopRight}) {
+    return new Toastr(ToastrType.Warning, title, message,
+        duration: duration, position: position);
   }
 
-  factory Toastr.error({String title, String message, Duration duration}) {
-    return new Toastr(ToastrType.Error, title, message, duration: duration);
+  factory Toastr.error(
+      {String title,
+      String message,
+      Duration duration: const Duration(seconds: 2),
+      ToastrPosition position: ToastrPosition.TopRight}) {
+    return new Toastr(ToastrType.Error, title, message,
+        duration: duration, position: position);
   }
 
   void remove() {
@@ -71,19 +94,42 @@ class Toastr {
   String _computeClass(ToastrType type) {
     switch (type) {
       case ToastrType.Success:
-        return 'toastr-success';
+        return 'toast-success';
 
       case ToastrType.Error:
-        return 'toastr-error';
+        return 'toast-error';
 
       case ToastrType.Warning:
-        return 'toastr-warning';
+        return 'toast-warning';
 
       case ToastrType.Info:
-        return 'toastr-info';
+        return 'toast-info';
     }
 
     throw new UnsupportedError('Unknown toast type $type');
+  }
+
+  String _computePositioningClass(ToastrPosition position) {
+    switch (position) {
+      case ToastrPosition.TopCenter:
+        return 'toast-top-center';
+      case ToastrPosition.BottomCenter:
+        return 'toast-bottom-center';
+      case ToastrPosition.TopFullWidth:
+        return 'toast-top-full-width';
+      case ToastrPosition.BottomFullWidth:
+        return 'toast-bottom-full-width';
+      case ToastrPosition.TopLeft:
+        return 'toast-top-left';
+      case ToastrPosition.TopRight:
+        return 'toast-top-right';
+      case ToastrPosition.BottomRight:
+        return 'toast-bottom-right';
+      case ToastrPosition.BottomLeft:
+        return 'toast-bottom-left';
+    }
+
+    throw new UnsupportedError('Unknown toastr position $position');
   }
 
   Element get element => _toastElement;
@@ -96,4 +142,17 @@ enum ToastrType {
   Error,
   Warning,
   Info,
+}
+
+enum ToastrPosition {
+  TopCenter,
+  BottomCenter,
+
+  TopFullWidth,
+  BottomFullWidth,
+
+  TopLeft,
+  TopRight,
+  BottomRight,
+  BottomLeft
 }
