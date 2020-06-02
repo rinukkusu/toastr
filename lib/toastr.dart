@@ -10,6 +10,7 @@ class Toastr {
 
   Toastr(ToastrType type, String title, String message,
       {Duration duration: const Duration(seconds: 2)}) {
+    duration ??= const Duration(seconds: 2);
     Element toastContainerElement =
         document.body.querySelector('#toast-container');
 
